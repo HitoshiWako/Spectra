@@ -1,4 +1,7 @@
 import numpy as np
+from scipy.stats import cauchy
+from scipy.optimize import curve_fit
+
 def peak(x):
 #　リストからピークとボトムの位置を見つけ
 #　その位置と両側の区切り（ピークであればボトム，ボトムであればピーク）を
@@ -27,3 +30,12 @@ def peak(x):
     vl = [(v[i],bp[i],bp[i+1]) for i in range(len(v))]
     
     return pl,vl
+
+def lorentz(x, loc = 0, scale = 1, mag = 1):
+#　ローレンツ曲線（コーシー分布）の設定    
+    return cauchy.pdf(x, loc = loc, scale = scale)*mag
+
+def lorentz_fit(x, y, loc, scale, mag):
+#　ローレンツ曲線でのフィッティング
+    return curve_fit(lorentz, x, y, p0 = [loc, scale, mag])
+
